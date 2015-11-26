@@ -1,0 +1,1 @@
+# Refract Message Body Generator
