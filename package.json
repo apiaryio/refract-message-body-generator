@@ -25,15 +25,10 @@
     "eslint": "",
     "eslint-config-airbnb": "",
     "chai": "",
-    "karma": "",
-    "karma-browserify": "",
-    "karma-chai": "",
-    "karma-firefox-launcher": "",
-    "karma-mocha": "",
-    "karma-mocha-reporter": "",
     "mocha": "",
     "babel-preset-es2015": "^6.1.18",
-    "babel-preset-stage-0": "^6.1.18"
+    "babel-preset-stage-0": "^6.1.18",
+    "in-publish": "",
   },
   "babel": {
     "presets": [
@@ -47,6 +42,5 @@
     "lodash-api-description": "0.0.1",
     "minim": "^0.12.2",
     "minim-parse-result": "^0.2.0",
-    "swagger-zoo": "apiaryio/swagger-zoo"
   }
 }
