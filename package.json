@@ -1,6 +1,5 @@
 {
   "name": "@apiaryio/refract-message-body-generator",
-  "nicename": "Refract Message Body Generator",
   "version": "0.0.1",
   "description": "Generates message bodies from JSON Schema.",
   "main": "./lib",
