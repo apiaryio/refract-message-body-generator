@@ -5,8 +5,9 @@
   "description": "Generates message bodies from JSON Schema.",
   "main": "./lib",
   "scripts": {
+    "prepublish": "not-in-install && npm run build || :",
     "lint": "eslint --ext .js,.es6",
-    "compile": "babel src/ --out-dir lib/",
+    "build": "babel src/ --out-dir lib/",
     "test": "mocha --compilers js:babel-core/register -R spec --recursive"
   },
   "repository": {
