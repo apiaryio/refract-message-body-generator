@@ -30,13 +30,13 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
   return schemaAsset.toRefract();
 }
 
-function generateMessageBody(httpRequestElement) {
-  const bodySchemas = lodash.messageBodySchemas(httpRequestElement);
+function generateMessageBody(httpMessageElement) {
+  const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
 
   bodySchemas.forEach(function(bodySchema) {
     const jsonSchema = JSON.parse(bodySchema.content);
 
-    httpRequestElement.content.push(
+    httpMessageElement.content.push(
       createMessageBodyAssetFromJsonSchema(jsonSchema)
     );
   });
@@ -53,6 +53,10 @@ function generateMessageBodies(refractElement) {
   // First, generate message bodies for each HTTP Request.
   let httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
   httpRequestElements.forEach(generateMessageBody);
+
+  // Second, generate message bodies for each HTTP Response.
+  let httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
+  httpResponseElements.forEach(generateMessageBody);
 
   return element;
 }
