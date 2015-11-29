@@ -2,10 +2,10 @@ import minimModule from 'minim';
 import minimParseResult from 'minim-parse-result';
 import lodash from 'lodash';
 import apiDescription from 'lodash-api-description';
-import jsonSchemaFaker from 'json-schema-faker'
+import jsonSchemaFaker from 'json-schema-faker';
 
-import queryElement from './queryElement'
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries'
+import queryElement from './queryElement';
+import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries';
 
 // Initialize the API Description Lodash mixin.
 apiDescription(lodash);
@@ -41,7 +41,7 @@ function generateMessageBody(httpMessageElement) {
 
   const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
 
-  bodySchemas.forEach(function(bodySchema) {
+  bodySchemas.forEach((bodySchema) => {
     const jsonSchema = JSON.parse(bodySchema.content);
 
     httpMessageElement.content.push(
@@ -56,14 +56,14 @@ function generateMessageBody(httpMessageElement) {
 // Please note that it returns a new Refract element,
 // it *does not mutate* the passed in element directly.
 function generateMessageBodies(refractElement) {
-  let element = lodash.cloneDeep(refractElement);
+  const element = lodash.cloneDeep(refractElement);
 
   // First, generate message bodies for each HTTP Request.
-  let httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
+  const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
   httpRequestElements.forEach(generateMessageBody);
 
   // Second, generate message bodies for each HTTP Response.
-  let httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
+  const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
   httpResponseElements.forEach(generateMessageBody);
 
   return element;

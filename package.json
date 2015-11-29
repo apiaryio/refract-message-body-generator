@@ -5,9 +5,9 @@
   "main": "./lib",
   "scripts": {
     "prepublish": "not-in-install && npm run build || :",
-    "lint": "eslint --ext .js,.es6",
+    "lint": "eslint src test",
     "build": "babel src/ --out-dir lib/",
-    "test": "mocha --compilers js:babel-core/register -R spec --recursive"
+    "test": "npm run lint && mocha --compilers js:babel-core/register -R spec --recursive"
   },
   "engines": {
     "node": "5.1.x",
@@ -40,6 +40,7 @@
     ]
   },
   "dependencies": {
+    "eslint-plugin-react": "^3.10.0",
     "json-schema-faker": "^0.2.4",
     "lodash": "^3.10.1",
     "lodash-api-description": "0.0.1",

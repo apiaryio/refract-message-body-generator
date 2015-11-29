@@ -1,9 +1,9 @@
 const HTTP_REQUEST_QUERY = {
-  element: 'httpRequest'
+  element: 'httpRequest',
 };
 
 const HTTP_RESPONSE_QUERY = {
-  element: 'httpResponse'
+  element: 'httpResponse',
 };
 
 export {

@@ -3,13 +3,13 @@ import {assert} from 'chai';
 
 import generateMessageBodies from '../src/index';
 import queryElement from '../src/queryElement';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from '../src/queries'
+import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
     let results;
 
-    before(function() {
+    before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-no-response.json'));
       const element = generateMessageBodies(fixture);
 
@@ -52,7 +52,7 @@ describe('#generateMessageBodies', () => {
     it('‘messageBody’ meta has not been mutated', () => {
       assert.deepEqual(results[0].content[1].meta, {
         classes: [
-          'messageBody'
+          'messageBody',
         ],
       });
     });
@@ -62,7 +62,7 @@ describe('#generateMessageBodies', () => {
     let httpRequests;
     let httpResponses;
 
-    before(function() {
+    before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/params.json'));
       const element = generateMessageBodies(fixture);
 
@@ -89,8 +89,8 @@ describe('#generateMessageBodies', () => {
           element: 'asset',
           meta: {
             classes: [
-              'messageBodySchema'
-            ]
+              'messageBodySchema',
+            ],
           },
           attributes: {
             contentType: 'application/schema+json',
@@ -116,7 +116,7 @@ describe('#generateMessageBodies', () => {
       it('‘messageBody’ meta has not been mutated', () => {
         assert.deepEqual(httpRequests[1].content[1].meta, {
           classes: [
-            'messageBody'
+            'messageBody',
           ],
         });
       });
@@ -139,8 +139,8 @@ describe('#generateMessageBodies', () => {
           element: 'asset',
           meta: {
             classes: [
-              'messageBodySchema'
-            ]
+              'messageBodySchema',
+            ],
           },
           attributes: {
             contentType: 'application/schema+json',
@@ -166,7 +166,7 @@ describe('#generateMessageBodies', () => {
       it('‘messageBody’ meta has not been mutated', () => {
         assert.deepEqual(httpResponses[1].content[1].meta, {
           classes: [
-            'messageBody'
+            'messageBody',
           ],
         });
       });
@@ -176,7 +176,7 @@ describe('#generateMessageBodies', () => {
   describe('Do not override existing message bodies', () => {
     let httpResponses;
 
-    before(function() {
+    before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/params-response-message-body.json'));
       const element = generateMessageBodies(fixture);
 
@@ -190,26 +190,26 @@ describe('#generateMessageBodies', () => {
             element: 'asset',
             meta: {
               classes: [
-                'messageBodySchema'
-              ]
+                'messageBodySchema',
+              ],
             },
             attributes: {
-              contentType: 'application/schema+json'
+              contentType: 'application/schema+json',
             },
-            content: '{"type":"string"}'
+            content: '{"type":"string"}',
           },
           {
             element: 'asset',
             meta: {
               classes: [
-                'messageBody'
-              ]
+                'messageBody',
+              ],
             },
             attributes: {
-              contentType: 'application/json'
+              contentType: 'application/json',
             },
-            content: '"ut omnis"'
-          }
+            content: '"ut omnis"',
+          },
         ]);
       });
     });

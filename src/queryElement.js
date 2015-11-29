@@ -13,16 +13,16 @@ function queryElement(element, query) {
     return [];
   }
 
-  let results = lodash.where(element.content, query);
+  const results = lodash.where(element.content, query);
 
   return lodash
     .chain(element.content)
-    .map(function(element) {
-      return queryElement(element, query);
+    .map((nestedElement) => {
+      return queryElement(nestedElement, query);
     })
     .flatten()
     .concat(results)
-    .value()
+    .value();
 }
 
 export default queryElement;

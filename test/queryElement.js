@@ -1,5 +1,4 @@
-import lodash from 'lodash'
-import fs from 'fs';
+import lodash from 'lodash';
 import {assert} from 'chai';
 
 import queryElement from '../src/queryElement';
@@ -8,11 +7,11 @@ describe('#queryElement', () => {
   describe('Query a request element', () => {
     let results = [];
 
-    before(function() {
+    before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-no-response.json'));
 
       results = queryElement(fixture, {
-        element: 'httpRequest'
+        element: 'httpRequest',
       });
     });
 
@@ -32,15 +31,15 @@ describe('#queryElement', () => {
             element: 'asset',
             meta: {
               classes: [
-                'messageBodySchema'
-              ]
+                'messageBodySchema',
+              ],
             },
             attributes: {
-              contentType: 'application/schema+json'
+              contentType: 'application/schema+json',
             },
-            content: '{"type":"string"}'
-          }
-        ]
+            content: '{"type":"string"}',
+          },
+        ],
       });
     });
   });
@@ -48,11 +47,11 @@ describe('#queryElement', () => {
   describe('Query a request element', () => {
     let results = [];
 
-    before(function() {
+    before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/params.json'));
 
       results = queryElement(fixture, {
-        element: 'httpRequest'
+        element: 'httpRequest',
       });
     });
 
@@ -66,30 +65,30 @@ describe('#queryElement', () => {
           element: 'httpRequest',
           meta: {},
           attributes: {
-            method: 'GET'
+            method: 'GET',
           },
-          content: []
+          content: [],
         },
         {
           element: 'httpRequest',
           meta: {},
           attributes: {
-            method: 'POST'
+            method: 'POST',
           },
           content: [
             {
               element: 'asset',
               meta: {
                 classes: [
-                  'messageBodySchema'
-                ]
+                  'messageBodySchema',
+                ],
               },
               attributes: {
-                contentType: 'application/schema+json'
+                contentType: 'application/schema+json',
               },
-              content: '{"type":"string"}'
-            }
-          ]
+              content: '{"type":"string"}',
+            },
+          ],
         },
       ]);
     });
