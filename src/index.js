@@ -5,6 +5,7 @@ import apiDescription from 'lodash-api-description';
 import jsonSchemaFaker from 'json-schema-faker'
 
 import queryElement from './queryElement'
+import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries'
 
 // Initialize the API Description Lodash mixin.
 apiDescription(lodash);
@@ -12,10 +13,6 @@ apiDescription(lodash);
 const minim = minimModule.namespace().use(minimParseResult);
 
 const Asset = minim.getElementClass('asset');
-
-const query = {
-  element: 'httpRequest'
-};
 
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element
