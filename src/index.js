@@ -45,11 +45,19 @@ function generateMessageBody(httpRequestElement) {
   });
 }
 
+// Generates message bodies for HTTP Requests and
+// HTTP Responses if there's a JSON Schema.
+//
+// Please note that it returns a new Refract element,
+// it *does not mutate* the passed in element directly.
 function generateMessageBodies(refractElement) {
-  let httpRequestElements = queryElement(refractElement, query);
+  let element = _.cloneDeep(refractElement);
+
+  // First, generate message bodies for each HTTP Request.
+  let httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
   httpRequestElements.forEach(generateMessageBody);
 
-  return refractElement;
+  return element;
 }
 
 export default generateMessageBodies;
