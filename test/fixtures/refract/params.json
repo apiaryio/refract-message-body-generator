@@ -147,7 +147,20 @@
                       "attributes": {
                         "statusCode": "200"
                       },
-                      "content": []
+                      "content": [
+                        {
+                          "element": "asset",
+                          "meta": {
+                            "classes": [
+                              "messageBodySchema"
+                            ]
+                          },
+                          "attributes": {
+                            "contentType": "application/schema+json"
+                          },
+                          "content": "{\"type\":\"string\"}"
+                        }
+                      ]
                     }
                   ]
                 }

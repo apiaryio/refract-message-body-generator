@@ -31,6 +31,14 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
 }
 
 function generateMessageBody(httpMessageElement) {
+  const messageBodies = lodash.messageBodies(httpMessageElement);
+
+  // If a HTTP Message contains a message body, do not
+  // generate another one.
+  if (messageBodies.length > 0) {
+    return;
+  }
+
   const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
 
   bodySchemas.forEach(function(bodySchema) {
