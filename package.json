@@ -1,6 +1,6 @@
 {
   "name": "@apiaryio/refract-message-body-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generates message bodies from JSON Schema.",
   "main": "./lib",
   "scripts": {
@@ -24,14 +24,15 @@
     "babel-cli": "",
     "babel-core": "",
     "babel-eslint": "",
-    "babelify": "",
-    "eslint": "",
-    "eslint-config-airbnb": "",
-    "chai": "",
-    "mocha": "",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
-    "in-publish": ""
+    "babelify": "",
+    "chai": "",
+    "eslint": "",
+    "eslint-config-airbnb": "",
+    "eslint-plugin-react": "^3.10.0",
+    "in-publish": "",
+    "mocha": ""
   },
   "babel": {
     "presets": [
@@ -40,7 +41,6 @@
     ]
   },
   "dependencies": {
-    "eslint-plugin-react": "^3.10.0",
     "json-schema-faker": "^0.2.4",
     "lodash": "^3.10.1",
     "lodash-api-description": "0.0.1",
