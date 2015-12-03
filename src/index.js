@@ -4,7 +4,7 @@ import lodash from 'lodash';
 import apiDescription from 'lodash-api-description';
 import jsonSchemaFaker from 'json-schema-faker';
 
-import queryElement from './queryElement';
+import query from 'refract-query';
 import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries';
 
 // Initialize the API Description Lodash mixin.
@@ -59,11 +59,11 @@ function generateMessageBodies(refractElement) {
   const element = lodash.cloneDeep(refractElement);
 
   // First, generate message bodies for each HTTP Request.
-  const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
+  const httpRequestElements = query(element, HTTP_REQUEST_QUERY);
   httpRequestElements.forEach(generateMessageBody);
 
   // Second, generate message bodies for each HTTP Response.
-  const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
+  const httpResponseElements = query(element, HTTP_RESPONSE_QUERY);
   httpResponseElements.forEach(generateMessageBody);
 
   return element;
