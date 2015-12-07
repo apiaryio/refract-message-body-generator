@@ -1,6 +1,6 @@
 // See https://github.com/airbnb/javascript/tree/master/linters
 {
-  "extends": "airbnb",
+  "extends": "airbnb/base",
   "parser": "babel-eslint",
   "env": {
     "node": true,

@@ -31,7 +31,6 @@
     "chai": "",
     "eslint": "",
     "eslint-config-airbnb": "",
-    "eslint-plugin-react": "^3.10.0",
     "in-publish": "",
     "mocha": ""
   },
