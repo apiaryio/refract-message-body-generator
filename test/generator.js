@@ -1,9 +1,9 @@
 import lodash from 'lodash';
-import {assert} from 'chai';
+import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
 import queryElement from '../src/queryElement';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from '../src/queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
@@ -211,6 +211,22 @@ describe('#generateMessageBodies', () => {
             content: '"ut omnis"',
           },
         ]);
+      });
+    });
+  });
+
+  describe('Fallback when the Json Schema is not valid', () => {
+    before(() => {
+      const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
+      const element = generateMessageBodies(fixture);
+
+      const httpResponses = queryElement(element, HTTP_RESPONSE_QUERY);
+      httpResponses.nasino = 0;
+    });
+
+    describe('Touch nasino', () => {
+      it('Response\'s content has not been changed', () => {
+        assert.deepEqual({}, {});
       });
     });
   });
