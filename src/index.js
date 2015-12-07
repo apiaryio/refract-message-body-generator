@@ -21,7 +21,12 @@ const Asset = minim.getElementClass('asset');
  * - jsonSchema (object)
  */
 function createMessageBodyAssetFromJsonSchema(jsonSchema) {
-  const messageBody = jsonSchemaFaker(jsonSchema);
+  let messageBody = {};
+
+  try {
+    messageBody = jsonSchemaFaker(jsonSchema);
+  } catch (e) {
+  }
 
   const schemaAsset = new Asset(JSON.stringify(messageBody));
   schemaAsset.classes.push('messageBody');

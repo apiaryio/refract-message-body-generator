@@ -216,18 +216,41 @@ describe('#generateMessageBodies', () => {
   });
 
   describe('Fallback when the Json Schema is not valid', () => {
+    let httpRequestes;
+
     before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
       const element = generateMessageBodies(fixture);
-
-      const httpResponses = queryElement(element, HTTP_RESPONSE_QUERY);
-      httpResponses.nasino = 0;
+      httpRequestes = queryElement(element, HTTP_REQUEST_QUERY);
     });
 
-    describe('Touch nasino', () => {
-      it('Response\'s content has not been changed', () => {
-        assert.deepEqual({}, {});
-      });
+    it('Request contains an empty body', () => {
+      assert.deepEqual(httpRequestes[0].content, [
+        {
+          element: 'asset',
+          meta: {
+            classes: [
+              'messageBodySchema',
+            ],
+          },
+          attributes: {
+            contentType: 'application/schema+json',
+          },
+          content: '{"type":"file"}',
+        },
+        {
+          element: 'asset',
+          meta: {
+            classes: [
+              'messageBody',
+            ],
+          },
+          attributes: {
+            contentType: 'application/json',
+          },
+          content: '{}',
+        },
+      ]);
     });
   });
 });
