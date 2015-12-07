@@ -1,5 +1,5 @@
 import lodash from 'lodash';
-import {assert} from 'chai';
+import { assert } from 'chai';
 
 import queryElement from '../src/queryElement';
 
