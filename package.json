@@ -43,8 +43,8 @@
   "dependencies": {
     "json-schema-faker": "^0.2.4",
     "lodash": "^3.10.1",
-    "lodash-api-description": "0.0.1",
-    "minim": "^0.12.2",
+    "lodash-api-description": "0.0.2",
+    "minim": "0.13.0",
     "minim-parse-result": "^0.2.0"
   }
 }
