@@ -68,6 +68,12 @@ function generateMessageBody(httpMessageElement) {
       bodyAsset.schemaAsset
     );
 
+    if (bodyAsset.annotation !== undefined &&
+        bodyAsset.attributes !== undefined &&
+        bodyAsset.attributes.sourceMap !== undefined) {
+      bodyAsset.annotation.attributes.sourceMap = lodash.cloneDeep(bodyAsset.attributes.sourceMap);
+    }
+
     return bodyAsset.annotation;
   });
 }
