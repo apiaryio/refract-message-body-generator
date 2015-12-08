@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
 import queryElement from '../src/queryElement';
-import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from '../src/queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
@@ -217,11 +217,13 @@ describe('#generateMessageBodies', () => {
 
   describe('Fallback when the Json Schema is not valid', () => {
     let httpRequestes;
+    let annotations;
 
     before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
       const element = generateMessageBodies(fixture);
       httpRequestes = queryElement(element, HTTP_REQUEST_QUERY);
+      annotations = queryElement(element, ANNOTATION);
     });
 
     it('Request contains an empty body', () => {
@@ -251,6 +253,10 @@ describe('#generateMessageBodies', () => {
           content: '{}',
         },
       ]);
+    });
+
+    it('Parse result object should have an annotation', () => {
+      assert.equal(annotations.length, 1);
     });
   });
 });

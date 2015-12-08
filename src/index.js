@@ -15,7 +15,7 @@ const minim = minimModule.namespace().use(minimParseResult);
 const Asset = minim.getElementClass('asset');
 const Annotation = minim.getElementClass('annotation');
 
-let annotations = [];
+const annotations = [];
 
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element

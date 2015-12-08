@@ -7,8 +7,8 @@ const HTTP_RESPONSE_QUERY = {
 };
 
 const ANNOTATION = {
-  element: 'annotation'
-}
+  element: 'annotation',
+};
 
 export {
   HTTP_REQUEST_QUERY,
