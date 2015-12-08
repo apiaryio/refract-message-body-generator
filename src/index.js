@@ -15,6 +15,8 @@ const minim = minimModule.namespace().use(minimParseResult);
 const Asset = minim.getElementClass('asset');
 const Annotation = minim.getElementClass('annotation');
 
+let annotations = [];
+
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element
  * with a generated `content` property.
@@ -22,24 +24,20 @@ const Annotation = minim.getElementClass('annotation');
  * - jsonSchema (object)
  */
 function createMessageBodyAssetFromJsonSchema(jsonSchema) {
-  let messageBody = {
-    content: [],
-  };
+  let messageBody = {};
 
   try {
     messageBody = jsonSchemaFaker(jsonSchema);
   } catch (e) {
-    const annotation = new Annotation(e);
+    const annotation = new Annotation(e.message);
     annotation.code = 3; // Data is being lost in the conversion.
     annotation.classes.push('warning');
-    messageBody.content = annotation.toRefract();
+    annotations.push(annotation.toRefract());
   }
 
   const schemaAsset = new Asset(JSON.stringify(messageBody));
   schemaAsset.classes.push('messageBody');
   schemaAsset.attributes.set('contentType', 'application/json');
-
-  console.log(schemaAsset.toRefract());
 
   return schemaAsset.toRefract();
 }
@@ -80,6 +78,7 @@ function generateMessageBodies(refractElement) {
   const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
   httpResponseElements.forEach(generateMessageBody);
 
+  element.content.push(...annotations);
   return element;
 }
 
