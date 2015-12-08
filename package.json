@@ -7,8 +7,8 @@
     "prepublish": "not-in-install && npm run build || :",
     "lint": "eslint src test",
     "build": "babel src/ --out-dir lib/",
-    "test": "npm run lint && npm run mochatest",
-    "mochatest": "mocha --compilers js:babel-core/register -R spec --recursive"
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "mocha --compilers js:babel-core/register -R spec --recursive"
   },
   "engines": {
     "node": "5.1.x",
