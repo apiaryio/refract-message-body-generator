@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
 import queryElement from '../src/queryElement';
-import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION } from '../src/queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION_QUERY } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
@@ -223,7 +223,7 @@ describe('#generateMessageBodies', () => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
       const element = generateMessageBodies(fixture);
       httpRequestes = queryElement(element, HTTP_REQUEST_QUERY);
-      annotations = queryElement(element, ANNOTATION);
+      annotations = queryElement(element, ANNOTATION_QUERY);
     });
 
     it('Request contains an empty body', () => {
