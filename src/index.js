@@ -37,14 +37,14 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
   schemaAsset.classes.push('messageBody');
   schemaAsset.attributes.set('contentType', 'application/json');
 
-  let annotationRefract = {};
+  let refractAnnotation = {};
   if (annotation !== undefined) {
-    annotationRefract = annotation.toRefract();
+    refractAnnotation = annotation.toRefract();
   }
 
   return {
     schemaAsset: schemaAsset.toRefract(),
-    annotation: annotationRefract,
+    annotation: refractAnnotation,
   };
 }
 
