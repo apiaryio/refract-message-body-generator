@@ -13,6 +13,7 @@ apiDescription(lodash);
 const minim = minimModule.namespace().use(minimParseResult);
 
 const Asset = minim.getElementClass('asset');
+const Annotation = minim.getElementClass('annotation');
 
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element
@@ -21,16 +22,24 @@ const Asset = minim.getElementClass('asset');
  * - jsonSchema (object)
  */
 function createMessageBodyAssetFromJsonSchema(jsonSchema) {
-  let messageBody = {};
+  let messageBody = {
+    content: [],
+  };
 
   try {
     messageBody = jsonSchemaFaker(jsonSchema);
   } catch (e) {
+    const annotation = new Annotation(e);
+    annotation.code = 3; // Data is being lost in the conversion.
+    annotation.classes.push('warning');
+    messageBody.content = annotation.toRefract();
   }
 
   const schemaAsset = new Asset(JSON.stringify(messageBody));
   schemaAsset.classes.push('messageBody');
   schemaAsset.attributes.set('contentType', 'application/json');
+
+  console.log(schemaAsset.toRefract());
 
   return schemaAsset.toRefract();
 }
