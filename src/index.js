@@ -54,7 +54,7 @@ function generateMessageBody(httpMessageElement) {
   // If a HTTP Message contains a message body, do not
   // generate another one.
   if (messageBodies.length > 0) {
-    return {};
+    return [];
   }
 
   const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
