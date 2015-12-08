@@ -15,8 +15,6 @@ const minim = minimModule.namespace().use(minimParseResult);
 const Asset = minim.getElementClass('asset');
 const Annotation = minim.getElementClass('annotation');
 
-const annotations = [];
-
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element
  * with a generated `content` property.
@@ -25,21 +23,29 @@ const annotations = [];
  */
 function createMessageBodyAssetFromJsonSchema(jsonSchema) {
   let messageBody = {};
+  let annotation = undefined;
 
   try {
     messageBody = jsonSchemaFaker(jsonSchema);
   } catch (e) {
-    const annotation = new Annotation(e.message);
+    annotation = new Annotation(e.message);
     annotation.code = 3; // Data is being lost in the conversion.
     annotation.classes.push('warning');
-    annotations.push(annotation.toRefract());
   }
 
   const schemaAsset = new Asset(JSON.stringify(messageBody));
   schemaAsset.classes.push('messageBody');
   schemaAsset.attributes.set('contentType', 'application/json');
 
-  return schemaAsset.toRefract();
+  let annotationRefract = {};
+  if (annotation !== undefined) {
+    annotationRefract = annotation.toRefract();
+  }
+
+  return {
+    schemaAsset: schemaAsset.toRefract(),
+    annotation: annotationRefract,
+  };
 }
 
 function generateMessageBody(httpMessageElement) {
@@ -48,17 +54,21 @@ function generateMessageBody(httpMessageElement) {
   // If a HTTP Message contains a message body, do not
   // generate another one.
   if (messageBodies.length > 0) {
-    return;
+    return {};
   }
 
   const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
 
-  bodySchemas.forEach((bodySchema) => {
+  return bodySchemas.map((bodySchema) => {
     const jsonSchema = JSON.parse(bodySchema.content);
 
+    const bodyAsset = createMessageBodyAssetFromJsonSchema(jsonSchema);
+
     httpMessageElement.content.push(
-      createMessageBodyAssetFromJsonSchema(jsonSchema)
+      bodyAsset.schemaAsset
     );
+
+    return bodyAsset.annotation;
   });
 }
 
@@ -72,13 +82,13 @@ function generateMessageBodies(refractElement) {
 
   // First, generate message bodies for each HTTP Request.
   const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
-  httpRequestElements.forEach(generateMessageBody);
+  const requestAnnotations = lodash.flatten(httpRequestElements.map(generateMessageBody));
 
   // Second, generate message bodies for each HTTP Response.
   const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
-  httpResponseElements.forEach(generateMessageBody);
+  const responseAnnotations = lodash.flatten(httpResponseElements.map(generateMessageBody));
 
-  element.content.push(...annotations);
+  element.content.push(...requestAnnotations, ...responseAnnotations);
   return element;
 }
 
