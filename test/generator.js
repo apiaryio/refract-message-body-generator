@@ -1,9 +1,9 @@
 import lodash from 'lodash';
-import {assert} from 'chai';
+import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
 import queryElement from '../src/queryElement';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from '../src/queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION_QUERY } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
@@ -212,6 +212,51 @@ describe('#generateMessageBodies', () => {
           },
         ]);
       });
+    });
+  });
+
+  describe('Fallback when the Json Schema is not valid', () => {
+    let httpRequestes;
+    let annotations;
+
+    before(() => {
+      const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
+      const element = generateMessageBodies(fixture);
+      httpRequestes = queryElement(element, HTTP_REQUEST_QUERY);
+      annotations = queryElement(element, ANNOTATION_QUERY);
+    });
+
+    it('Request contains an empty body', () => {
+      assert.deepEqual(httpRequestes[0].content, [
+        {
+          element: 'asset',
+          meta: {
+            classes: [
+              'messageBodySchema',
+            ],
+          },
+          attributes: {
+            contentType: 'application/schema+json',
+          },
+          content: '{"type":"file"}',
+        },
+        {
+          element: 'asset',
+          meta: {
+            classes: [
+              'messageBody',
+            ],
+          },
+          attributes: {
+            contentType: 'application/json',
+          },
+          content: '{}',
+        },
+      ]);
+    });
+
+    it('Parse result object should have an annotation', () => {
+      assert.equal(annotations.length, 1);
     });
   });
 });

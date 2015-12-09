@@ -5,7 +5,7 @@ import apiDescription from 'lodash-api-description';
 import jsonSchemaFaker from 'json-schema-faker';
 
 import queryElement from './queryElement';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from './queries';
 
 // Initialize the API Description Lodash mixin.
 apiDescription(lodash);
@@ -13,6 +13,7 @@ apiDescription(lodash);
 const minim = minimModule.namespace().use(minimParseResult);
 
 const Asset = minim.getElementClass('asset');
+const Annotation = minim.getElementClass('annotation');
 
 /**
  * Takes JSON Schema and outputs a `messageBody` Refract element
@@ -21,33 +22,65 @@ const Asset = minim.getElementClass('asset');
  * - jsonSchema (object)
  */
 function createMessageBodyAssetFromJsonSchema(jsonSchema) {
-  const messageBody = jsonSchemaFaker(jsonSchema);
+  let messageBody = {};
+  let annotation = undefined;
 
-  const schemaAsset = new Asset(JSON.stringify(messageBody));
-  schemaAsset.classes.push('messageBody');
-  schemaAsset.attributes.set('contentType', 'application/json');
+  try {
+    messageBody = jsonSchemaFaker(jsonSchema);
+  } catch (e) {
+    annotation = new Annotation(e.message);
+    annotation.code = 3; // Data is being lost in the conversion.
+    annotation.classes.push('warning');
+  }
 
-  return schemaAsset.toRefract();
+  const bodyAsset = new Asset(JSON.stringify(messageBody));
+  bodyAsset.classes.push('messageBody');
+  bodyAsset.attributes.set('contentType', 'application/json');
+
+  let refractAnnotation = {};
+  if (annotation !== undefined) {
+    refractAnnotation = annotation.toRefract();
+  }
+
+  return {
+    bodyAsset: bodyAsset.toRefract(),
+    annotation: refractAnnotation,
+  };
 }
 
 function generateMessageBody(httpMessageElement) {
+  const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
+
+  return bodySchemas.map((bodySchema) => {
+    const jsonSchema = JSON.parse(bodySchema.content);
+
+    const bodyAsset = createMessageBodyAssetFromJsonSchema(jsonSchema);
+
+    if (bodyAsset.annotation !== undefined &&
+        bodyAsset.attributes !== undefined &&
+        bodyAsset.attributes.sourceMap !== undefined) {
+      bodyAsset.annotation.attributes.sourceMap = lodash.cloneDeep(bodyAsset.attributes.sourceMap);
+    }
+
+    return bodyAsset;
+  });
+}
+
+// Takes a message element in input, injects a generated message body
+// if (missing) and returns generated annotations for it.
+function injectMessageBody(httpMessageElement) {
   const messageBodies = lodash.messageBodies(httpMessageElement);
 
   // If a HTTP Message contains a message body, do not
   // generate another one.
   if (messageBodies.length > 0) {
-    return;
+    return [];
   }
 
-  const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
+  const generatedMessageBodies = generateMessageBody(httpMessageElement);
 
-  bodySchemas.forEach((bodySchema) => {
-    const jsonSchema = JSON.parse(bodySchema.content);
-
-    httpMessageElement.content.push(
-      createMessageBodyAssetFromJsonSchema(jsonSchema)
-    );
-  });
+  httpMessageElement.content.push(...generatedMessageBodies.map(messageBody => messageBody.bodyAsset));
+  return generatedMessageBodies.map(messageBody => messageBody.annotation || {});
 }
 
 // Generates message bodies for HTTP Requests and
@@ -60,12 +93,14 @@ function generateMessageBodies(refractElement) {
 
   // First, generate message bodies for each HTTP Request.
   const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
-  httpRequestElements.forEach(generateMessageBody);
+  const requestAnnotations = lodash.flatten(httpRequestElements.map(injectMessageBody));
 
   // Second, generate message bodies for each HTTP Response.
   const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
-  httpResponseElements.forEach(generateMessageBody);
+  const responseAnnotations = lodash.flatten(httpResponseElements.map(injectMessageBody));
 
+  // Last step, let's push all the annotations
+  element.content.push(...requestAnnotations, ...responseAnnotations);
   return element;
 }
 
