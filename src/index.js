@@ -33,9 +33,9 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
     annotation.classes.push('warning');
   }
 
-  const schemaAsset = new Asset(JSON.stringify(messageBody));
-  schemaAsset.classes.push('messageBody');
-  schemaAsset.attributes.set('contentType', 'application/json');
+  const bodyAsset = new Asset(JSON.stringify(messageBody));
+  bodyAsset.classes.push('messageBody');
+  bodyAsset.attributes.set('contentType', 'application/json');
 
   let refractAnnotation = {};
   if (annotation !== undefined) {
@@ -43,12 +43,32 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
   }
 
   return {
-    schemaAsset: schemaAsset.toRefract(),
+    bodyAsset: bodyAsset.toRefract(),
     annotation: refractAnnotation,
   };
 }
 
 function generateMessageBody(httpMessageElement) {
+  const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
+
+  return bodySchemas.map((bodySchema) => {
+    const jsonSchema = JSON.parse(bodySchema.content);
+
+    const bodyAsset = createMessageBodyAssetFromJsonSchema(jsonSchema);
+
+    if (bodyAsset.annotation !== undefined &&
+        bodyAsset.attributes !== undefined &&
+        bodyAsset.attributes.sourceMap !== undefined) {
+      bodyAsset.annotation.attributes.sourceMap = lodash.cloneDeep(bodyAsset.attributes.sourceMap);
+    }
+
+    return bodyAsset;
+  });
+}
+
+// Takes a message element in input, injects a generated message body
+// if (missing) and returns generated annotations for it.
+function injectMessageBody(httpMessageElement) {
   const messageBodies = lodash.messageBodies(httpMessageElement);
 
   // If a HTTP Message contains a message body, do not
@@ -57,25 +77,10 @@ function generateMessageBody(httpMessageElement) {
     return [];
   }
 
-  const bodySchemas = lodash.messageBodySchemas(httpMessageElement);
+  const generatedMessageBodies = generateMessageBody(httpMessageElement);
 
-  return bodySchemas.map((bodySchema) => {
-    const jsonSchema = JSON.parse(bodySchema.content);
-
-    const bodyAsset = createMessageBodyAssetFromJsonSchema(jsonSchema);
-
-    httpMessageElement.content.push(
-      bodyAsset.schemaAsset
-    );
-
-    if (bodyAsset.annotation !== undefined &&
-        bodyAsset.attributes !== undefined &&
-        bodyAsset.attributes.sourceMap !== undefined) {
-      bodyAsset.annotation.attributes.sourceMap = lodash.cloneDeep(bodyAsset.attributes.sourceMap);
-    }
-
-    return bodyAsset.annotation;
-  });
+  httpMessageElement.content.push(...generatedMessageBodies.map(messageBody => messageBody.bodyAsset));
+  return generatedMessageBodies.map(messageBody => messageBody.annotation || {});
 }
 
 // Generates message bodies for HTTP Requests and
@@ -88,12 +93,13 @@ function generateMessageBodies(refractElement) {
 
   // First, generate message bodies for each HTTP Request.
   const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
-  const requestAnnotations = lodash.flatten(httpRequestElements.map(generateMessageBody));
+  const requestAnnotations = lodash.flatten(httpRequestElements.map(injectMessageBody));
 
   // Second, generate message bodies for each HTTP Response.
   const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
-  const responseAnnotations = lodash.flatten(httpResponseElements.map(generateMessageBody));
+  const responseAnnotations = lodash.flatten(httpResponseElements.map(injectMessageBody));
 
+  // Last step, let's push all the annotations
   element.content.push(...requestAnnotations, ...responseAnnotations);
   return element;
 }
