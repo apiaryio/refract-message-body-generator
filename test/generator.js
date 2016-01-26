@@ -177,7 +177,9 @@ describe('#generateMessageBodies', () => {
     let httpResponses;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require('./fixtures/refract/params-response-message-body.json'));
+      const fixture = lodash.cloneDeep(require(
+        './fixtures/refract/params-response-message-body.json'
+      ));
       const element = generateMessageBodies(fixture);
 
       httpResponses = queryElement(element, HTTP_RESPONSE_QUERY);

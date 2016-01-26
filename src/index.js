@@ -33,7 +33,7 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
     annotation.classes.push('warning');
   }
 
-  const bodyAsset = new Asset(JSON.stringify(messageBody));
+  const bodyAsset = new Asset(JSON.stringify(messageBody, null, 2));
   bodyAsset.classes.push('messageBody');
   bodyAsset.attributes.set('contentType', 'application/json');
 
@@ -79,7 +79,9 @@ function injectMessageBody(httpMessageElement) {
 
   const generatedMessageBodies = generateMessageBody(httpMessageElement);
 
-  httpMessageElement.content.push(...generatedMessageBodies.map(messageBody => messageBody.bodyAsset));
+  httpMessageElement.content.push(...generatedMessageBodies.map(
+    messageBody => messageBody.bodyAsset)
+  );
   return generatedMessageBodies.map(messageBody => messageBody.annotation || {});
 }
 
