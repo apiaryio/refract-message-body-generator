@@ -5,7 +5,7 @@ import apiDescription from 'lodash-api-description';
 import jsonSchemaFaker from 'json-schema-faker';
 
 import query from 'refract-query';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from './queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from './queries';
 
 // Initialize the API Description Lodash mixin.
 apiDescription(lodash);

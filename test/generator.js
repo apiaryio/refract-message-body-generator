@@ -1,9 +1,9 @@
 import lodash from 'lodash';
-import {assert} from 'chai';
+import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
 import query from 'refract-query';
-import {HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY} from '../src/queries';
+import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
@@ -177,7 +177,9 @@ describe('#generateMessageBodies', () => {
     let httpResponses;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require('./fixtures/refract/params-response-message-body.json'));
+      const fixture = lodash.cloneDeep(
+        require('./fixtures/refract/params-response-message-body.json')
+      );
       const element = generateMessageBodies(fixture);
 
       httpResponses = query(element, HTTP_RESPONSE_QUERY);
