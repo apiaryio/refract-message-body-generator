@@ -4,7 +4,7 @@ import lodash from 'lodash';
 import apiDescription from 'lodash-api-description';
 import jsonSchemaFaker from 'json-schema-faker';
 
-import queryElement from './queryElement';
+import query from 'refract-query';
 import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY } from './queries';
 
 // Initialize the API Description Lodash mixin.
@@ -33,7 +33,7 @@ function createMessageBodyAssetFromJsonSchema(jsonSchema) {
     annotation.classes.push('warning');
   }
 
-  const bodyAsset = new Asset(JSON.stringify(messageBody));
+  const bodyAsset = new Asset(JSON.stringify(messageBody, null, 2));
   bodyAsset.classes.push('messageBody');
   bodyAsset.attributes.set('contentType', 'application/json');
 
@@ -79,7 +79,9 @@ function injectMessageBody(httpMessageElement) {
 
   const generatedMessageBodies = generateMessageBody(httpMessageElement);
 
-  httpMessageElement.content.push(...generatedMessageBodies.map(messageBody => messageBody.bodyAsset));
+  httpMessageElement.content.push(...generatedMessageBodies.map(
+    messageBody => messageBody.bodyAsset)
+  );
   return generatedMessageBodies.map(messageBody => messageBody.annotation || {});
 }
 
@@ -92,11 +94,11 @@ function generateMessageBodies(refractElement) {
   const element = lodash.cloneDeep(refractElement);
 
   // First, generate message bodies for each HTTP Request.
-  const httpRequestElements = queryElement(element, HTTP_REQUEST_QUERY);
+  const httpRequestElements = query(element, HTTP_REQUEST_QUERY);
   const requestAnnotations = lodash.flatten(httpRequestElements.map(injectMessageBody));
 
   // Second, generate message bodies for each HTTP Response.
-  const httpResponseElements = queryElement(element, HTTP_RESPONSE_QUERY);
+  const httpResponseElements = query(element, HTTP_RESPONSE_QUERY);
   const responseAnnotations = lodash.flatten(httpResponseElements.map(injectMessageBody));
 
   // Last step, let's push all the annotations

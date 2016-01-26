@@ -1,6 +1,6 @@
 {
   "name": "@apiaryio/refract-message-body-generator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generates message bodies from JSON Schema.",
   "main": "./lib",
   "scripts": {
@@ -44,7 +44,8 @@
     "json-schema-faker": "^0.2.4",
     "lodash": "^3.10.1",
     "lodash-api-description": "0.0.2",
-    "minim": "0.13.0",
-    "minim-parse-result": "^0.2.0"
+    "minim": "^0.13.0",
+    "minim-parse-result": "^0.2.0",
+    "refract-query": "^0.0.1"
   }
 }
