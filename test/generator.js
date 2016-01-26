@@ -2,7 +2,7 @@ import lodash from 'lodash';
 import { assert } from 'chai';
 
 import generateMessageBodies from '../src/index';
-import queryElement from '../src/queryElement';
+import query from 'refract-query';
 import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION_QUERY } from '../src/queries';
 
 describe('#generateMessageBodies', () => {
@@ -13,7 +13,7 @@ describe('#generateMessageBodies', () => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-no-response.json'));
       const element = generateMessageBodies(fixture);
 
-      results = queryElement(element, HTTP_REQUEST_QUERY);
+      results = query(element, HTTP_REQUEST_QUERY);
     });
 
     it('Request contains ‘messageBodySchema’ and ‘messageBody’', () => {
@@ -66,8 +66,8 @@ describe('#generateMessageBodies', () => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/params.json'));
       const element = generateMessageBodies(fixture);
 
-      httpRequests = queryElement(element, HTTP_REQUEST_QUERY);
-      httpResponses = queryElement(element, HTTP_RESPONSE_QUERY);
+      httpRequests = query(element, HTTP_REQUEST_QUERY);
+      httpResponses = query(element, HTTP_RESPONSE_QUERY);
     });
 
     describe('First request', () => {
@@ -182,7 +182,7 @@ describe('#generateMessageBodies', () => {
       ));
       const element = generateMessageBodies(fixture);
 
-      httpResponses = queryElement(element, HTTP_RESPONSE_QUERY);
+      httpResponses = query(element, HTTP_RESPONSE_QUERY);
     });
 
     describe('Response containing a message body', () => {
@@ -224,8 +224,8 @@ describe('#generateMessageBodies', () => {
     before(() => {
       const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
       const element = generateMessageBodies(fixture);
-      httpRequestes = queryElement(element, HTTP_REQUEST_QUERY);
-      annotations = queryElement(element, ANNOTATION_QUERY);
+      httpRequestes = query(element, HTTP_REQUEST_QUERY);
+      annotations = query(element, ANNOTATION_QUERY);
     });
 
     it('Request contains an empty body', () => {
