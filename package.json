@@ -1,7 +1,7 @@
 {
-  "name": "@apiaryio/refract-message-body-generator",
-  "version": "0.0.5",
-  "description": "Generates message bodies from JSON Schema.",
+  "name": "refract-message-body-generator",
+  "version": "1.0.0",
+  "description": "Generates message bodies from JSON Schema in Refract tree",
   "main": "./lib",
   "scripts": {
     "prepublish": "not-in-install && npm run build || :",
