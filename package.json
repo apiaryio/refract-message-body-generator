@@ -1,6 +1,6 @@
 {
   "name": "refract-message-body-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates message bodies from JSON Schema in Refract tree",
   "main": "./lib",
   "scripts": {
