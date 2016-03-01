@@ -21,7 +21,7 @@ It takes a Refract element such as the following:
 }
 ```
 
-As a result, it will place the message body in-line:
+and it will place the following message body asset as a sibling of the that element
 
 ```json
 {
@@ -46,5 +46,5 @@ generateMessageBodies([Refract Element]);
 ## Installation
 
 ```shell
-$ npm install @apiaryio/refract-message-body-generator
+$ npm install refract-message-body-generator
 ```
