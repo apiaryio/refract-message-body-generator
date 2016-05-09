@@ -5,12 +5,17 @@ import generateMessageBodies from '../src/index';
 import query from 'refract-query';
 import { HTTP_REQUEST_QUERY, HTTP_RESPONSE_QUERY, ANNOTATION_QUERY } from '../src/queries';
 
+const paramsFixture = require('./fixtures/refract/params.json');
+const noResponseFixture = require('./fixtures/refract/param-no-response.json');
+const messageBodyFixture = require('./fixtures/refract/params-response-message-body.json');
+const unknownTypeFixture = require('./fixtures/refract/param-unknown-type.json');
+
 describe('#generateMessageBodies', () => {
   describe('Generate a message body for a HTTP Request', () => {
     let results;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require('./fixtures/refract/param-no-response.json'));
+      const fixture = lodash.cloneDeep(noResponseFixture);
       const element = generateMessageBodies(fixture);
 
       results = query(element, HTTP_REQUEST_QUERY);
@@ -63,7 +68,7 @@ describe('#generateMessageBodies', () => {
     let httpResponses;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require('./fixtures/refract/params.json'));
+      const fixture = lodash.cloneDeep(paramsFixture);
       const element = generateMessageBodies(fixture);
 
       httpRequests = query(element, HTTP_REQUEST_QUERY);
@@ -177,9 +182,7 @@ describe('#generateMessageBodies', () => {
     let httpResponses;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require(
-        './fixtures/refract/params-response-message-body.json'
-      ));
+      const fixture = lodash.cloneDeep(messageBodyFixture);
       const element = generateMessageBodies(fixture);
 
       httpResponses = query(element, HTTP_RESPONSE_QUERY);
@@ -222,7 +225,7 @@ describe('#generateMessageBodies', () => {
     let annotations;
 
     before(() => {
-      const fixture = lodash.cloneDeep(require('./fixtures/refract/param-unknown-type.json'));
+      const fixture = lodash.cloneDeep(unknownTypeFixture);
       const element = generateMessageBodies(fixture);
       httpRequestes = query(element, HTTP_REQUEST_QUERY);
       annotations = query(element, ANNOTATION_QUERY);
