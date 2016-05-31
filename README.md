@@ -1,5 +1,11 @@
 # Refract Message Body Generator [![CircleCI Build Status](https://circleci.com/gh/apiaryio/refract-message-body-generator.svg?style=shield)](https://circleci.com/gh/apiaryio/refract-message-body-generator)
 
+## Deprecation Notice
+
+As of June 1st, 2016 this library is deprecated and should not be used for new development.
+
+---
+
 Generates message bodies from JSON Schema found within [Refract API
 Description](https://github.com/refractproject/refract-spec/blob/master/namespaces/api-description-namespace.md).
 
